@@ -1,6 +1,9 @@
 from discord.ext import tasks
+from discord import FFmpegPCMAudio
 from random import randint
+from get_random_stuff import random_sound
 import env
+
 
 
 TASK_FAILED = "FAILED TO EXECUTE TASK"
@@ -10,12 +13,12 @@ class Tasks():
         self.bot = bot
         self.voice_channel = voice_channel
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(minutes=5)
     async def task_random_sound(self):
         try:
-            sounds = self.bot.soundboard_sounds
-            random_sound = sounds[randint(0, len(sounds) - 1)]
-            await self.voice_channel.send_sound(random_sound)
+            sound = FFmpegPCMAudio(random_sound())
+            self.voice_channel.play(sound)
+            print("Playing sound...")
         except Exception as e:
             print(TASK_FAILED, "task_random_sound", str(e))
     

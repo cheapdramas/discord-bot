@@ -3,7 +3,7 @@ import json
 import env
 
 json_filename = env.getenv("JSON_FILENAME") 
-MAX_WARNINGS  = env.getenv("MAX_WARN")
+MAX_WARNINGS  = env.getenv("MAX_WARNINGS")
 json_path = Path(json_filename)
 
 class UserModel():
@@ -24,12 +24,13 @@ class UserModel():
                 print(f"User '{self.id}' not detected in json, adding")
                 json_file.close()
                 self.add_user()
+            else:
+                self.warn = user_payload["warn"]
 
 
-    def add_warn(self): 
-        self.warn = self.json_obj[self.id]["warn"] + 1
-        #ban nahui
-        if self.warn <= MAX_WARNINGS:
+    def add_warn(self):
+        if self.warn < MAX_WARNINGS:
+            self.warn = self.json_obj[self.id]["warn"] + 1
             self.add_user()
         
        

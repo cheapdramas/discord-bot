@@ -1,11 +1,11 @@
 from discord.ext import commands
 from jsonchik import create_json
 from bot_actions.tasks import Tasks
-from get_random_stuff import random_gif
+from get_random_stuff import random_gif 
 import env
 
-MAIN_VOICE_CHANNEL_ID = env.getenv("MAIN_VOICE_CHANNEL_ID")
-MAX_WARNINGS          : int = env.getenv("MAX_WARN")
+MAIN_VOICE_CHANNEL_ID: int = env.getenv("MAIN_VOICE_CHANNEL_ID")
+MAX_WARNINGS: int = env.getenv("MAX_WARNINGS")
 
 class Events(commands.Cog):
     def __init__(self, bot):
@@ -17,9 +17,9 @@ class Events(commands.Cog):
         print("Starting bot...")
         create_json()
         voice_channel = self.bot.get_channel(MAIN_VOICE_CHANNEL_ID)
-        tasks = Tasks(self.bot, voice_channel)
         try:
-            await voice_channel.connect()
+            voice_cleint = await voice_channel.connect()
+            tasks = Tasks(self.bot, voice_cleint)
             await tasks.start()
         except Exception as e:
             print("Bot start failed, reason:", str(e))
@@ -40,11 +40,16 @@ class Events(commands.Cog):
             await message.delete()
             await message.channel.send(f"{message.author.mention} внучок нє матєрісь")
 
-        if self.message_combo == MAX_WARNINGS:
+        if self.message_combo == 5:
             await message.channel.send(random_gif())
             self.message_combo = 0
+            print("MESSAGE COMBO! Sending gif..")
 
-        await self.bot.process_commands(message)
+        await self.bot.process_commands()
 
 async def setup(bot):
-    await bot.add_cog(Events(bot))
+    if bot.get_cog("Events") is None:
+        await bot.add_cog(Events(bot))
+    else:
+        print("Commands cog already loaded")
+

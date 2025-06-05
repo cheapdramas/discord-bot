@@ -1,8 +1,8 @@
 from discord.ext import commands
 from get_random_stuff import random_gif
 from random import randint
+from jsonchik import add_warn
 import env
-from jsonchik import MAX_WARNINGS
 
 MAX_WARNINGS : int = env.getenv("MAX_WARNINGS")
 APP_ID : int = env.getenv("APP_ID")
@@ -11,9 +11,11 @@ APP_ID : int = env.getenv("APP_ID")
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        print("Commands cog initialized")
 
     @commands.command()
     async def hello(self, ctx):
+        print("greetings")
         await ctx.send(f"Hello {ctx.author.mention}!")
 
     
@@ -47,7 +49,7 @@ class Commands(commands.Cog):
 
         await replied_message.add_reaction("💀")
         warn_count = add_warn(replied_message.author.id)
-
+        await ctx.send(f"У {ctx.author.mention} ДО БАНА НАХУЙ ЗАЛИШИЛОСЬ: {MAX_WARNINGS - warn_count }")
         if warn_count == MAX_WARNINGS and not replied_message_author.guild_permissions.administrator and who_replied.guild_permissions.administrator:
             try:
                 await ctx.send(f"{replied_message.author.mention} ПІЗДА НАСТАЛА ПОРОСЯ")
@@ -56,11 +58,12 @@ class Commands(commands.Cog):
                 await ctx.send(f"❌ Помилка при бані: {e}")
 
 
-        await ctx.send(
-            f"У {replied_message.author.mention} ДО ПІЗДЕЦА ОСТАЛОСЬ {MAX_WARNINGS - warn_count}"
-        )
+        
 
 
 
 async def setup(bot):
-    await bot.add_cog(Commands(bot))
+    if bot.get_cog("Commands") is None:
+        await bot.add_cog(Commands(bot))
+    else:
+        print("Commands cog already loaded")
