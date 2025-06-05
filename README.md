@@ -18,12 +18,13 @@
 
 ## Як підлаштувати під свій сервер?
 
-У основній папці проєкту (`discord-bot`) створіть `.env` файл із наступною інформацією:
+У основній папці проєкту (`discord-bot`) створіть `.env` файл із таким вмістом:
 
-APP_ID=<ВАШ APPLICATION ID>
-PUBLIC_KEY="<ВАШ PUBLIC KEY>"
-TOKEN="<ВАШ TOKEN>"
-JSON_FILENAME="НАЗВА .json файлу"
-MAX_WARNINGS=<МАКСИМАЛЬНА КІЛЬКІСТЬ ВАРНІВ>
-TENOR_KEY="<API КЛЮЧ ВІД TENOR>"
-MAIN_VOICE_CHANNEL_ID=<ВАШ ID ГОЛОСОВОГО КАНАЛУ>
+```env
+APP_ID=               # Ваш Application ID (число)
+PUBLIC_KEY="..."      # Ваш Public Key (рядок у лапках)
+TOKEN="..."           # Ваш токен бота (рядок у лапках)
+JSON_FILENAME="..."   # Назва .json файлу, де зберігаються варни
+MAX_WARNINGS=         # Максимальна кількість варнів (число)
+TENOR_KEY="..."       # API-ключ від Tenor (рядок у лапках)
+MAIN_VOICE_CHANNEL_ID=# ID голосового каналу (число)
