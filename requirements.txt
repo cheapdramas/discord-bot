@@ -1,6 +1,2 @@
 python-dotenv
 discord.py
-<<<<<<< HEAD
-=======
-
->>>>>>> d1baa0ea2fee656c55de901e8fef75a50d63cb29
