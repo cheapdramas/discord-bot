@@ -23,7 +23,7 @@ def random_gif() -> str | None:
         return gifs['results'][0]['media_formats']['webp']['url']
     return None
 
-def random_sound() -> str | None:
+def random_sound() -> str:
     r = requests.get(
         SOUND_URL % config.SOUND_TOPIC
     )
@@ -39,4 +39,6 @@ def random_sound() -> str | None:
 
     if sound_urls:
         return SOUND_URL_BASE + choice(sound_urls)
-    return None
+    #if we got None, fallback to default sound topic 
+    config.SOUND_TOPIC = config.DEFAULT_SOUND_TOPIC
+    return random_sound()

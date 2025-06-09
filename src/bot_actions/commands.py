@@ -70,9 +70,6 @@ class Commands(commands.Cog):
         
 
 
-        
-
-
 
 async def setup(bot):
     if bot.get_cog("Commands") is None:

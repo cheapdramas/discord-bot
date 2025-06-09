@@ -13,7 +13,7 @@ class Tasks():
         self.bot = bot
         self.voice_channel = voice_channel
 
-    @tasks.loop(seconds=5)
+    @tasks.loop(minutes=5)
     async def task_random_sound(self):
         try:
             sound = FFmpegPCMAudio(random_sound())

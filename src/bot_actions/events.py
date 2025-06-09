@@ -1,3 +1,4 @@
+import discord 
 from discord.ext import commands
 from jsonchik import create_json
 from bot_actions.tasks import Tasks
@@ -11,6 +12,8 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.message_combo = 0
+        #changing immediately when bot starts (on_ready)
+        self.voice_client: None | discord.VoiceClient = None
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -18,8 +21,8 @@ class Events(commands.Cog):
         create_json()
         voice_channel = self.bot.get_channel(MAIN_VOICE_CHANNEL_ID)
         try:
-            voice_cleint = await voice_channel.connect()
-            tasks = Tasks(self.bot, voice_cleint)
+            self.voice_client = await voice_channel.connect()
+            tasks = Tasks(self.bot, self.voice_client)
             await tasks.start()
         except Exception as e:
             print("Bot start failed, reason:", str(e))
@@ -44,6 +47,16 @@ class Events(commands.Cog):
             await message.channel.send(random_gif())
             self.message_combo = 0
             print("MESSAGE COMBO! Sending gif..")
+        
+        if self.bot.user in message.mentions:
+            content = message.content.lower()
+            #@BOT no sound = досить грати звук у войс каналі
+            if "no sound" in content:
+                if self.voice_client.is_playing():
+                    self.voice_client.stop()
+                    await message.channel.send(f"{message.author.mention} ти заїбав")
+                    
+
 
         await self.bot.process_commands()
 
