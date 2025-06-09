@@ -2,7 +2,7 @@ from discord.ext import tasks
 from discord import FFmpegPCMAudio
 from random import randint
 from get_random_stuff import random_sound
-import env
+import config 
 
 
 
@@ -13,7 +13,7 @@ class Tasks():
         self.bot = bot
         self.voice_channel = voice_channel
 
-    @tasks.loop(minutes=5)
+    @tasks.loop(seconds=5)
     async def task_random_sound(self):
         try:
             sound = FFmpegPCMAudio(random_sound())

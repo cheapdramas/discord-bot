@@ -2,10 +2,10 @@ from discord.ext import commands
 from jsonchik import create_json
 from bot_actions.tasks import Tasks
 from get_random_stuff import random_gif 
-import env
+import config 
 
-MAIN_VOICE_CHANNEL_ID: int = env.getenv("MAIN_VOICE_CHANNEL_ID")
-MAX_WARNINGS: int = env.getenv("MAX_WARNINGS")
+MAIN_VOICE_CHANNEL_ID: int = config.getenv("MAIN_VOICE_CHANNEL_ID")
+MAX_WARNINGS: int = config.getenv("MAX_WARNINGS")
 
 class Events(commands.Cog):
     def __init__(self, bot):

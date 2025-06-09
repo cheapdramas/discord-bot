@@ -2,10 +2,10 @@ from discord.ext import commands
 from get_random_stuff import random_gif
 from random import randint
 from jsonchik import add_warn
-import env
+import config 
 
-MAX_WARNINGS : int = env.getenv("MAX_WARNINGS")
-APP_ID : int = env.getenv("APP_ID")
+MAX_WARNINGS : int = config.getenv("MAX_WARNINGS")
+APP_ID : int = config.getenv("APP_ID")
 
 
 class Commands(commands.Cog):
@@ -14,11 +14,17 @@ class Commands(commands.Cog):
         print("Commands cog initialized")
 
     @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def kill(self, ctx):
+        print("GOT 'KILL', BYE")
+        await self.bot.close()
+
+
+    @commands.command()
     async def hello(self, ctx):
         print("greetings")
         await ctx.send(f"Hello {ctx.author.mention}!")
 
-    
     @commands.command()
     async def gif(self, ctx):
         await ctx.send(random_gif())
@@ -29,7 +35,6 @@ class Commands(commands.Cog):
         activity = activities[randint(0, len(activities) - 1)]
         await ctx.send(activity)
 
-
     @commands.command()
     async def warn(self, ctx):
         channel = ctx.channel
@@ -39,7 +44,7 @@ class Commands(commands.Cog):
         replied_message_author = guild.get_member(replied_message.author.id)
         who_replied = guild.get_member(ctx.author.id)
 
-        if replied_message.author.id == env.getenv("APP_ID"):
+        if replied_message.author.id == config.getenv("APP_ID"):
             await replied_message.add_reaction("😄")
             await ctx.send(
                 f"{ctx.author.mention} ти ахуєл ето же я!!"
@@ -49,13 +54,20 @@ class Commands(commands.Cog):
 
         await replied_message.add_reaction("💀")
         warn_count = add_warn(replied_message.author.id)
-        await ctx.send(f"У {ctx.author.mention} ДО БАНА НАХУЙ ЗАЛИШИЛОСЬ: {MAX_WARNINGS - warn_count }")
+        await ctx.send(f"У {replied_message.author.mention} ДО БАНА НАХУЙ ЗАЛИШИЛОСЬ: {MAX_WARNINGS - warn_count }")
         if warn_count == MAX_WARNINGS and not replied_message_author.guild_permissions.administrator and who_replied.guild_permissions.administrator:
             try:
                 await ctx.send(f"{replied_message.author.mention} ПІЗДА НАСТАЛА ПОРОСЯ")
                 await replied_message_author.ban(reason="нє уступіл мєсто в автобусе")
             except Exception as e:
                 await ctx.send(f"❌ Помилка при бані: {e}")
+
+    @commands.command(name="topic")
+    async def set_topic(self, ctx, *, topic: str):
+        config.SOUND_TOPIC = topic
+
+
+        
 
 
         

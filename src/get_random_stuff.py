@@ -1,16 +1,17 @@
 import requests
 import json
-import env
+import config 
 from random import randint,choice
 from bs4 import BeautifulSoup
 import re
 
 
-TENOR_API_KEY = env.getenv("TENOR_KEY")   
+TENOR_API_KEY = config.getenv("TENOR_KEY")   
 TENOR_CLIENT_KEY = "bot" 
 TENOR_URL = "https://tenor.googleapis.com/v2/search?q=post-irony&key=%s&client_key=%s&limit=1&random=true"
+
 SOUND_URL_BASE = "https://www.myinstants.com"
-SOUND_URL = SOUND_URL_BASE + "/en/search/?name=MEME"
+SOUND_URL = SOUND_URL_BASE + "/en/search/?name=%s"
 
 def random_gif() -> str | None:
 
@@ -23,7 +24,9 @@ def random_gif() -> str | None:
     return None
 
 def random_sound() -> str | None:
-    r = requests.get(SOUND_URL)
+    r = requests.get(
+        SOUND_URL % config.SOUND_TOPIC
+    )
     bs = BeautifulSoup(r.text, "html.parser")
     buttons = bs.find_all('button', class_='small-button')
 

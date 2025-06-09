@@ -1,9 +1,9 @@
 from pathlib import Path
 import json
-import env
+import config 
 
-json_filename = env.getenv("JSON_FILENAME") 
-MAX_WARNINGS  = env.getenv("MAX_WARNINGS")
+json_filename = config.getenv("JSON_FILENAME") 
+MAX_WARNINGS  = config.getenv("MAX_WARNINGS")
 json_path = Path(json_filename)
 
 class UserModel():

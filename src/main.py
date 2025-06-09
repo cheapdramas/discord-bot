@@ -1,12 +1,10 @@
 import logging
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
-import env
+import config
 
 
-load_dotenv()
-TOKEN: str = env.getenv("TOKEN")
+TOKEN: str = config.getenv("TOKEN")
 
 handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
 
